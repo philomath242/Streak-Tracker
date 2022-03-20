@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Streak Tracker</title>
+    <script src="https://kit.fontawesome.com/d3fd9d5f94.js" crossorigin="anonymous"></script>
+    <link rel="icon" href="logo.jpg">
+    <meta name="theme-color" content="#910200">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
+
+    <style>
+        body{
+            overflow-x: hidden;
+            user-select: none;
+            background-color: #F8C9DB;
+        }
+        div#container{
+
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+
+
+            visibility: hidden;
+        }
+        div#motivation{
+            line-height: 120%;
+            background-color: #F8C9DB;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            z-index: -5;
+            text-transform: uppercase;
+            font-size: 90px;
+            font-weight: bold;
+            font-family: 'Raleway', sans-serif;
+            visibility: visible;
+        }
+        div#motivation hr{
+            visibility: hidden;
+            margin: 40px;
+        }
+
+
+        div#timegained{
+            padding: 18vh 0;
+            vertical-align: center;
+            position: relative;
+            display: inline-block;
+            float: left;
+            width: 50%;
+            height: 100%;
+            text-align: center;
+            font-size: 4vw;
+            border-right: solid rebeccapurple;
+            z-index: 5;
+        }
+
+        div#timegained span{
+            font-size: 8vw;
+            font-family: "Yu Gothic UI Semibold";
+            color: green;
+
+
+        }
+
+        div#startdate{
+            padding: 8vh 0;
+            display: inline-block;
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            text-align: center;
+            z-index: 5;
+            font-size: 3vw;
+        }
+
+        div#startdate span{
+            font-size: 5.5vw;
+            font-family: monospace;
+            color: darkblue;
+        }
+
+        div#countdown{
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            width: 50%;
+            height: 50%;
+            text-align: center;
+            border-top: solid darkblue;
+            z-index: 5;
+            font-size: 3vw;
+            vertical-align: middle;
+
+        }
+
+        div#countdown span{
+            font-size: 4.2vw;
+            font-family: "Roboto Medium";
+            color: #7511d7;
+        }
+
+
+
+
+
+
+
+
+
+
+        div#footer{
+            position:fixed; bottom:0; right:50%;
+            margin: 10px auto -20px auto; transform: translateX(50%);
+            font-family: monospace; font-size: 2vh;
+            text-align: center; padding: 0;
+        }
+        div#footer h6:not(:last-child){
+            margin: 2px auto; font-weight: 100;
+        }
+        div#footer hr{
+            height: 1px; width: 100%; border: 0;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+        }
+        h6#copyright{
+            text-align: right;
+            font-family: "Times New Roman";
+            font-weight: 400;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="motivation"> Recovery is a battle. <hr> A daily battle. <hr> Just keep fighting.
+        <hr> Just hold on. <hr> Slowly, the battles will get easier. </div>
+
+    <div id="container">
+    <div id="timegained"> You have gained <br><span> </span><br> minutes </div>
+
+    <div id="startdate"> Started since <br> <span> 19-03-2022 </span> </div>
+
+    <div id="countdown"> <span>  </span> has passed </div>
+
+    </div>
+
+
+
+
+
+<script type="text/javascript">
+    document.getElementById('motivation').style.visibility = "visible";
+
+    const dates = document.querySelector('div#startdate span').innerHTML.trim();
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    window.onload = function (){
+        updateCounter();
+        setInterval(ifNoClicks, 2000);
+    };
+
+        async function ifNoClicks() {
+
+            let show = document.getElementById('motivation').style.visibility;
+            await sleep(3000);
+            if (document.getElementById('motivation').style.visibility == show){
+                if (show == "visible")hideMotivation();
+                else if(show == "hidden")showMotivation();
+            }
+        }
+
+
+
+    document.getElementById('container').onclick = showMotivation;
+
+    document.getElementById('motivation').onclick = hideMotivation;
+
+    function showMotivation() {
+        document.getElementById('container').style.visibility = "hidden";
+        document.getElementById('motivation').style.visibility = "visible";
+
+    }
+
+    function hideMotivation() {
+        document.getElementById('motivation').style.visibility = "hidden";
+        document.getElementById('container').style.visibility = "visible";
+        console.log((60*document.querySelector('div#timegained span').innerHTML).toFixed(3) + " seconds");
+        updateCounter();
+        setInterval(updateCounter, 950);
+    }
+
+
+    const mydate = new Date(dates.split('-').reverse().join('-'));
+    mydate.setHours(5, 35, 1);
+    console.log("date is", mydate);
+
+    document.querySelector('div#startdate span').innerHTML = mydate.getDate().toString() + " " + monthNames[mydate.getMonth()] + " " + mydate.getFullYear().toString();
+
+    console.log();
+
+    function updateCounter() {
+        let difference = Math.ceil((Date.now() - mydate.getTime())/1000);
+
+        // console.log("difference is ", secondsToCountdown(difference));
+
+        document.querySelector('div#timegained span').innerHTML = ((difference/60)*(5/129600)).toFixed(3);
+
+        document.querySelector('div#countdown span').innerHTML = secondsToCountdown(difference);
+    }
+
+    function secondsToCountdown(seconds) {
+        let d = Math.floor(seconds / (3600*24));
+        let h = Math.floor(seconds % (3600*24) / 3600);
+        let m = Math.floor(seconds % 3600 / 60);
+        let s = Math.floor(seconds % 60);
+
+
+        let days = d > 0 ? d + (d == 1 ? " day <br>" : " days <br>") : "";
+        let hours = h > 0 ? h + (h == 1 ? " hour " : " hours ") : "";
+        let mins = m > 0 ? m + (m == 1 ? " minute " : " minutes ") : "";
+        let secs = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+        return days + hours + '<br>'  + mins + '<br>'+ secs+ '<br>';
+
+    }
+
+
+
+</script>
+
+</body>
+</html>
