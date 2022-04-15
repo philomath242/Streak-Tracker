@@ -145,7 +145,7 @@
     <div id="container">
     <div id="timegained"> You have gained <br><span> </span><br> minutes </div>
 
-    <div id="startdate"> Started since <br> <span> 04-04-2022 </span> </div>
+    <div id="startdate"> Started since <br> <span> 15-04-2022 </span> </div>
 
     <div id="countdown"> <span>  </span> has passed </div>
 
@@ -204,7 +204,7 @@
 
 
     const mydate = new Date(dates.split('-').reverse().join('-'));
-    mydate.setHours(18, 35, 1);
+    mydate.setHours(16, 14, 1);
     console.log("date is", mydate);
 
     document.querySelector('div#startdate span').innerHTML = mydate.getDate().toString() + " " + monthNames[mydate.getMonth()] + " " + mydate.getFullYear().toString();
