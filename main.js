@@ -46,7 +46,7 @@ function hideMotivation() {
 
 
 const mydate = new Date(dates.split('-').reverse().join('-'));
-mydate.setHours(1, 1, 1);
+mydate.setHours(8, 1, 1);
 console.log("date is", mydate);
 
 document.querySelector('div#startdate span').innerHTML = mydate.getDate().toString() + " " + monthNames[mydate.getMonth()] + " " + mydate.getFullYear().toString();
